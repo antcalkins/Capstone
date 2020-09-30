@@ -1,4 +1,5 @@
 import hashlib
+import glob
 
 
 def read_binary_file(path):
@@ -11,8 +12,11 @@ def read_binary_file(path):
     return content  # <--- str() converts the binary data to a string
 
 
-def hash(path):
-    md5 = hashlib.md5(read_binary_file(path))
-    sha1 = hashlib.md5(read_binary_file(path))
-    sha256 = hashlib.md5(read_binary_file(path))
-    return {"path": path, "md5": md5, "sha1": sha1, "sha256": sha256}
+def md5(path):
+    return hashlib.md5(read_binary_file(path))
+
+def sha1(path):
+    return hashlib.sha1(read_binary_file(path))
+
+def sha256(path):
+    return hashlib.sha256(read_binary_file(path))
