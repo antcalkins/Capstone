@@ -18,10 +18,21 @@ for i in range(0, len(names)):
                             str(hashlib.sha1(names[i].encode('utf-8')).hexdigest())
 
 dataframe = pd.DataFrame(list(hashed_dict.items()), columns=['full file paths', 'hashes'])  # creates dataframe
-dataframe[['md5', 'sha256', 'sha1']] = dataframe['hashes'].str.split(expand=True)  # splits hashes column by type
+dataframe[['md5', 'sha256', 'sha1']] = dataframe['hashes'].str.split(expand=True)  # splits hashes column
 dataframe.drop(['hashes'], axis=1, inplace=True)  # drops the unnecessary hashes column
-print(dataframe.info())
-print(dataframe.head())
+dataframe[['path parts']] = dataframe['full file paths'].str.split("/")
+# print(dataframe.info())
+# print(dataframe.head())
 dataframe.to_csv("dataframe.csv")  # converts dataframe to a csv file
-
-
+print("file made :)")
+value = "lyall.sh"
+print(list(dataframe["path parts"].loc[27]))
+# searching path path parts
+for i in dataframe.index:
+    search = list(dataframe["path parts"].loc[i])
+    if search.__contains__(value) is True:
+        print("found it")
+        print(dataframe.iloc[i])
+    i += 1
+    if i == dataframe.index[-1]:
+        print("all done")
