@@ -24,15 +24,16 @@ dataframe[['path parts']] = dataframe['full file paths'].str.split("/")
 # print(dataframe.info())
 # print(dataframe.head())
 dataframe.to_csv("dataframe.csv")  # converts dataframe to a csv file
-print("file made :)")
-value = "lyall.sh"
-print(list(dataframe["path parts"].loc[27]))
+# print("file made :)")
+value = ".jpg"
 # searching path path parts
 for i in dataframe.index:
     search = list(dataframe["path parts"].loc[i])
-    if search.__contains__(value) is True:
-        print("found it")
-        print(dataframe.iloc[i])
+    for j in range(0, len(search)):
+        if search[-j].__contains__(value) is True:
+            print("found it")
+            print(dataframe.iloc[i])
+        j += 1
     i += 1
     if i == dataframe.index[-1]:
         print("all done")
