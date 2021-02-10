@@ -7,6 +7,11 @@ import hashlib
 import glob
 import pandas as pd
 
+# System Variable Block
+# Windows/Dos like
+
+# Linux/Unix Block
+
 target = "/home/writer/"  # this sets the target directory
 names = glob.glob(target + '**/*.*', recursive=True)  # this goes through every file path inside of the directory
 hashed_dict = {}  # this is where the hashed files will be stored
@@ -27,6 +32,7 @@ dataframe.to_csv("dataframe.csv")  # converts dataframe to a csv file
 # print("file made :)")
 value = ".jpg"
 # searching path path parts
+# Set for user input
 for i in dataframe.index:
     search = list(dataframe["path parts"].loc[i])
     for j in range(0, len(search)):
