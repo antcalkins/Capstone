@@ -7,6 +7,7 @@ import hashlib
 import glob
 import pandas as pd
 
+
 target = "/home/writer/"  # this sets the target directory
 names = glob.glob(target + '**/*.*', recursive=True)  # this goes through every file path inside of the directory
 hashed_dict = {}  # this is where the hashed files will be stored
