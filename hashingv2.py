@@ -14,16 +14,13 @@ hashed_dict = {}  # this is where the hashed files will be stored
 
 
 def read_binary_file(path):
-    try:
-        """Read a binary file specified by 'path' and print contents to console"""
-        # print(" Opening file for reading " + path)
-        file = open(path, 'rb')
-        content = file.read()  # Read entire file
-        file.close()
-        # print(content)
-        return content #converts the binary data as bytes
-    except IsADirectoryError:
-        pass
+    """Reads a binary file specified by 'path' and print contents to console"""
+    # print(" Opening file for reading " + path)
+    file = open(path, 'rb')
+    content = file.read()  # Read entire file
+    file.close()
+    # print(content)
+    return content  # converts the binary data as bytes
 
 
 def md5(path):
@@ -47,8 +44,12 @@ def sha256(path):
 
 for i in range(0, len(names)):
     # this creates the entries for the dictionary with the index being the full paths and the column info being hashes
-    hashed_dict[names[i]] = str(md5(names[i])) + str(sha256(names[i])) + str(sha1(names[i]))
-    print(hashed_dict[names[i]])
+    try:
+        hashed_dict[names[i]] = str(md5(names[i])) + str(sha256(names[i])) + str(sha1(names[i]))
+    except IsADirectoryError:
+        pass
+    # print(hashed_dict[names[i]])
+
 
 # Database Generation and manipulation
 dataframe = pd.DataFrame(list(hashed_dict.items()), columns=['full file paths', 'hashes'])  # creates dataframe
@@ -60,6 +61,7 @@ dataframe[['path parts']] = dataframe['full file paths'].str.split("/")
 # print(dataframe.head())
 dataframe.to_csv("dataframe.csv")  # converts dataframe to a csv file
 # print("file made :)")
+
 
 ##########################
 
