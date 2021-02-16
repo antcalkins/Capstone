@@ -82,8 +82,8 @@ if path.exists("dataframe2.csv") is False:
 
 else:
     """If the database file already exists, this portion of the code will run. It starts by asking if the user wants 
-    to search the database."""
-    dataframe = pd.read_csv("dataframe_updated.csv")
+    to update the database."""
+    dataframe = pd.read_csv("dataframe2.csv")
     dataframe_list = list(dataframe.columns)
     database_update = input("Would you like to update the database? Type 'y' for yes or 'n' for no ")
     if database_update is 'y':
