@@ -4,7 +4,7 @@ import glob
 target = input("Directory of interest:")
 paths = glob.glob(target + '**/*.*', recursive=True)
 
-
+###
 def read_binary_file(path):
     """Read a binary file specified by 'path' and print contents to console"""
     # print(" Opening file for reading " + path)
@@ -13,7 +13,7 @@ def read_binary_file(path):
     f.close()
     #  print(content)
     return content  # <--- str() converts the binary data to a string
-
+###
 
 def md5(path):
     """Returns the MD5 hash of the input path's associated file"""
