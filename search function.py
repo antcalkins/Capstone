@@ -1,8 +1,13 @@
+import pandas as pd
+
+dataframe = pd.read_csv("dataframe2.csv")
+print(dataframe.head(10))
+print(list(dataframe.columns))
 def search_function(column, search_term):
-    if column is "full file paths" or column is "md5" or column is "sha1" or column is "sha256" \
-            or column is "path parts":
+    dataframe_list = list(dataframe.columns)
+    if dataframe_list.__contains__(column) is True:
         for i in dataframe.index:
-            search = list(dataframe[column].loc[i])
+            search = list(dataframe[column])
             for j in range(0, len(search)):
                 if search[-j].__contains__(search_term) is True:
                     print("found it")
@@ -14,7 +19,10 @@ def search_function(column, search_term):
     else:
         print("That is an invalid column to search in, sorry :(")
 
+column = "full file paths"
+search_term = ".png"
 
+search_function(column, search_term)
 """
 value = input("What are you searching for? Type h for Hashes or f for file part. F includes "
               "file exentions.")

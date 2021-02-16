@@ -7,7 +7,6 @@ import hashlib
 import glob
 import pandas as pd
 from os import path
-import pathlib
 
 target = "/home/writer/"  # this sets the target directory
 names = glob.glob(target + '**/*.*', recursive=True)  # this goes through every file path inside of the directory
@@ -39,9 +38,27 @@ def sha256(path):
     return hashlib.sha256(read_binary_file(path)).hexdigest()
 
 
+def search_function(column, search_term):
+    dataframe_list = list(dataframe.columns)
+    if dataframe_list.__contains__(column) is True:
+        for i in dataframe.index:
+            search = list(dataframe[column])
+            for j in range(0, len(search)):
+                if search[-j].__contains__(search_term) is True:
+                    print("found it")
+                    print(dataframe.iloc[i])
+                j += 1
+            i += 1
+        if i == dataframe.index[-1]:
+            print("all done!")
+    else:
+        print("That is an invalid column to search in, sorry :(")
+
+
 if path.exists("dataframe2.csv") is False:
     for i in range(0, len(names)):
-        # this creates the entries for the dictionary with the index being the full paths and the column info being hashes
+        # this creates the entries for the dictionary with the index being the full paths and the
+        # column info being hashes
         try:
             hashed_dict[names[i]] = str(md5(names[i])) + " " + str(sha256(names[i])) + " " + str(sha1(names[i]))
         except IsADirectoryError or KeyError:
@@ -57,34 +74,10 @@ if path.exists("dataframe2.csv") is False:
     # print(dataframe.head())
     dataframe.to_csv("dataframe2.csv")  # converts dataframe to a csv file
     print("file made :)")
-
-
-    def search_function(column, search_term):
-        # This is the search function that allows a user to search the database.
-        # Column is a string that specifies the specific column in the dataframe
-        # search_term is a string that is the specific search parameter such as a file name, file extension, hash,
-        # or file path
-        if column is "full file paths" or column is "md5" or column is "sha1" or column is "sha256" or column is "path parts":
-            for i in dataframe.index:
-                search = list(dataframe[column].loc[i])
-                for j in range(0, len(search)):
-                    if search[-j].__contains__(search_term) is True:
-                        print("found it")
-                        print(dataframe.iloc[i])
-                        j += 1
-                    else:
-                        print("I couldn't find it")
-                        j += 1
-                i += 1
-            if i == dataframe.index[-1]:
-                print("all done!")
-        else:
-            print("That is an invalid column to search in, sorry :(")
-
-
     search_start = input("Would you like to search the database? type 'y' for yes or 'n' for no")
     while search_start is 'y':
-        print(dataframe.info())
+        dataframe_list = list(dataframe.columns)
+        print(dataframe_list)
         column = input("What column would you like to search?")
         search_term = input("Put your search term here")
         search_function(column, search_term)
@@ -94,35 +87,11 @@ if path.exists("dataframe2.csv") is False:
 else:
     search_start = input("Would you like to search the database? type 'y' for yes or 'n' for no")
     dataframe = pd.read_csv("dataframe2.csv")
-
-
-    def search_function(column, search_term):
-        # This is the search function that allows a user to search the database.
-        # Column is a string that specifies the specific column in the dataframe
-        # search_term is a string that is the specific search parameter such as a file name, file extension, hash,
-        # or file path
-        if column is "full file paths" or column is "md5" or column is "sha1" or column is "sha256" or column is "path parts":
-            for i in dataframe.index:
-                search = list(dataframe[column].loc[i])
-                for j in range(0, len(search)):
-                    if search[-j].__contains__(search_term) is True:
-                        print("found it")
-                        print(dataframe.iloc[i])
-                        j += 1
-                    else:
-                        print("I couldn't find it")
-                        j += 1
-                i += 1
-            if i == dataframe.index[-1]:
-                print("all done!")
-        else:
-            print("That is an invalid column to search in, sorry :(")
-
-
+    dataframe_list = list(dataframe.columns)
     while search_start is 'y':
-        print(dataframe.info())
+        print(dataframe_list)
         column = input("What column would you like to search?")
         search_term = input("Put your search term here")
         search_function(column, search_term)
         search_start = input("Do you still want to search? Type 'y' for yes and 'n' for no")
-
+print("Thank you for using Information Hoarder")
