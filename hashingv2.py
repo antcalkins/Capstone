@@ -1,7 +1,7 @@
 """ This code is designed to hash files and create a pandas dataframe that can be referenced by a graphical interface
 and modified by the user.
 Authors: L.E. Rogers and A.B. Calkins
-Last Edited: 13/02/2021"""
+Last Edited: 16/02/2021"""
 import hashlib
 import glob
 import pandas as pd
@@ -38,6 +38,9 @@ def sha256(path):
 
 
 def search_function(column, search_term):
+    """Function that searches a database in order to return search results.
+    column is a string word or phrase that is the specific column being searched by the user.
+    search_term is a string that is either a hash, name of a file, a part of a file path, or a complete file path."""
     dataframe_list = list(dataframe.columns)
     if dataframe_list.__contains__(column) is True:
         for i in dataframe.index:
@@ -55,9 +58,11 @@ def search_function(column, search_term):
 
 
 if path.exists("dataframe2.csv") is False:
+    """This portion of the code checks to see if the database file exists. If not, it will create the database and 
+    then allow a user to search the newly created database."""
     for i in range(0, len(names)):
-        # this creates the entries for the dictionary with the index being the full paths and the
-        # column info being hashes
+        """This creates the entries for the dictionary with the index being the full paths and the
+        column info being hashes"""
         try:
             hashed_dict[names[i]] = str(md5(names[i])) + " " + str(sha256(names[i])) + " " + str(sha1(names[i]))
         except IsADirectoryError or KeyError:
@@ -84,13 +89,16 @@ if path.exists("dataframe2.csv") is False:
 
 
 else:
-    search_start = input("Would you like to search the database? type 'y' for yes or 'n' for no")
+    """If the database file already exists, this portion of the code will run. It starts by asking if the user wants 
+    to search the database."""
+    search_start = input("Would you like to search the database? type 'y' for yes or 'n' for no ")
     dataframe = pd.read_csv("dataframe2.csv")
     dataframe_list = list(dataframe.columns)
     while search_start is 'y':
         print(dataframe_list)
-        column = input("What column would you like to search?")
-        search_term = input("Put your search term here")
+        column = input("What column would you like to search? ")
+        search_term = input("Put your search term here: ")
         search_function(column, search_term)
-        search_start = input("Do you still want to search? Type 'y' for yes and 'n' for no")
+        search_start = input("Do you still want to search? Type 'y' for yes and 'n' for no ")
+
 print("Thank you for using Information Hoarder")
