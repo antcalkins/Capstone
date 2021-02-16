@@ -38,23 +38,15 @@ def sha256(path):
 
 
 def search_function(column, search_term):
-    """Function that searches a database in order to return search results.
-    column is a string word or phrase that is the specific column being searched by the user.
-    search_term is a string that is either a hash, name of a file, a part of a file path, or a complete file path."""
-    dataframe_list = list(dataframe.columns)
     if dataframe_list.__contains__(column) is True:
+        search = list(dataframe[column])
         for i in dataframe.index:
-            search = list(dataframe[column])
-            for j in range(0, len(search)):
-                if search[-j].__contains__(search_term) is True:
-                    print("found it")
-                    print(dataframe.iloc[i])
-                j += 1
+            if search[i].__contains__(search_term) is True:
+                print("found it")
+                print(dataframe.iloc[i])
             i += 1
-        if i == dataframe.index[-1]:
-            print("all done!")
     else:
-        print("That is an invalid column to search in, sorry :(")
+        print("Sorry, that is an invalid column type")
 
 
 if path.exists("dataframe2.csv") is False:
@@ -78,7 +70,7 @@ if path.exists("dataframe2.csv") is False:
     # print(dataframe.head())
     dataframe.to_csv("dataframe2.csv")  # converts dataframe to a csv file
     print("file made :)")
-    search_start = input("Would you like to search the database? type 'y' for yes or 'n' for no")
+    search_start = input("Would you like to search the database? Type 'y' for yes or 'n' for no")
     while search_start is 'y':
         dataframe_list = list(dataframe.columns)
         print(dataframe_list)
@@ -91,9 +83,26 @@ if path.exists("dataframe2.csv") is False:
 else:
     """If the database file already exists, this portion of the code will run. It starts by asking if the user wants 
     to search the database."""
-    search_start = input("Would you like to search the database? type 'y' for yes or 'n' for no ")
-    dataframe = pd.read_csv("dataframe2.csv")
+    dataframe = pd.read_csv("dataframe_updated.csv")
     dataframe_list = list(dataframe.columns)
+    database_update = input("Would you like to update the database? Type 'y' for yes or 'n' for no ")
+    if database_update is 'y':
+        for i in range(0, len(names)):
+            """This creates the entries for the dictionary with the index being the full paths and the
+            column info being hashes"""
+            try:
+                hashed_dict[names[i]] = str(md5(names[i])) + " " + str(sha256(names[i])) + " " + str(sha1(names[i]))
+            except IsADirectoryError or KeyError:
+                pass
+
+        # Database Generation and manipulation
+        dataframe2 = pd.DataFrame(list(hashed_dict.items()), columns=['full file paths', 'hashes'])  # creates dataframe
+        dataframe2[['md5', 'sha256', 'sha1']] = dataframe2['hashes'].str.split(expand=True)  # splits hashes column
+        dataframe2.drop(['hashes'], axis=1, inplace=True)  # drops the unnecessary hashes column
+        dataframe2[['path parts']] = dataframe2['full file paths'].str.split("/")
+        dataframe2.to_csv("dataframe_updated.csv")  # converts dataframe to a csv file
+        dataframe = dataframe2
+    search_start = input("Would you like to search the database? Type 'y' for yes or 'n' for no ")
     while search_start is 'y':
         print(dataframe_list)
         column = input("What column would you like to search? ")
