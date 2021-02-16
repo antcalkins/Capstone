@@ -1,8 +1,7 @@
 """ This code is designed to hash files and create a pandas dataframe that can be referenced by a graphical interface
 and modified by the user.
 Authors: L.E. Rogers and A.B. Calkins
-Last Edited: 09/10/2020
-"""
+Last Edited: 13/02/2021"""
 import hashlib
 import glob
 import pandas as pd
