@@ -47,10 +47,8 @@ def search_function(column, search_term):
             i += 1
     else:
         print("That is an invalid column to search in, sorry :(")
-
 column = "full file paths"
 search_term = "Code "
-
 search_function(column, search_term)
 """
 """
