@@ -6,6 +6,7 @@ import hashlib
 import glob
 import pandas as pd
 from os import path
+import argparse
 
 target = "/home/writer/"  # this sets the target directory
 names = glob.glob(target + '**/*.*', recursive=True)  # this goes through every file path inside of the directory
@@ -14,11 +15,9 @@ hashed_dict = {}  # this is where the hashed files will be stored
 
 def read_binary_file(path):
     """Reads a binary file specified by 'path' and print contents to console"""
-    # print(" Opening file for reading " + path)
     file = open(path, 'rb')
     content = file.read()  # Read entire file
     file.close()
-    # print(content)
     md5_hash = hashlib.md5(content).hexdigest()
     sha256_hash = hashlib.sha256(content).hexdigest()
     sha1_hash = hashlib.sha1(content).hexdigest()
@@ -30,10 +29,11 @@ def search_function(column, search_term):
         search = list(dataframe[column])
         for i in dataframe.index:
             if search[i].__contains__(search_term) is True:
-                # print("found it")
+                if search_term == "path parts":
+                    search_list = dataframe[column][i]
+                    if search_list.__contains__(search_term) is True:
+                        print(dataframe.iloc[i])
                 print(dataframe.iloc[i])
-                # if path parts search list
-                # if duplicate mark with *
             i += 1
     else:
         print("Sorry, that is an invalid column type")
@@ -55,9 +55,6 @@ if path.exists("dataframe2.csv") is False:
     dataframe[['md5', 'sha256', 'sha1']] = dataframe['hashes'].str.split(expand=True)  # splits hashes column
     dataframe.drop(['hashes'], axis=1, inplace=True)  # drops the unnecessary hashes column
     dataframe[['path parts']] = dataframe['full file paths'].str.split("/")
-    # Database design check
-    # print(dataframe.info())
-    # print(dataframe.head())
     dataframe.to_csv("dataframe2.csv")  # converts dataframe to a csv file
     print("file made :)")
     search_start = input("Would you like to search the database? Type 'y' for yes or 'n' for no ")

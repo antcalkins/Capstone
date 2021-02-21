@@ -42,6 +42,10 @@ def search_function(column, search_term):
         search = list(dataframe[column])
         for i in dataframe.index:
             if search[i].__contains__(search_term) is True:
+                if search_term == "path parts":
+                    search_list = dataframe[column][i]
+                    if search_list.__contains__(search_term) is True:
+                        print(dataframe.iloc[i])
                 # print("found it")
                 print(dataframe.iloc[i])
                 # if path parts search list
