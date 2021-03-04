@@ -1,7 +1,7 @@
 """ This code is designed to hash files and create a pandas dataframe that can be referenced by a graphical interface
 and modified by the user.
 Authors: L.E. Rogers and A.B. Calkins
-Last Edited: 03/03/2021"""
+Last Edited: 04/03/2021"""
 import hashlib
 import glob
 import pandas as pd
@@ -32,7 +32,7 @@ hashed_dict = {}  # this is where the hashed files will be stored
 
 
 def read_binary_file(path):
-    """Reads a binary file specified by 'path' and print contents to console"""
+    """Reads a binary file specified by 'path' and print contents to console."""
     file = open(path, 'rb')
     content = file.read()  # Read entire file
     file.close()
@@ -50,8 +50,8 @@ def search_function(column, search_term):
                 if search_term == "path parts":
                     search_list = dataframe[column][i]
                     if search_list.__contains__(search_term) is True:
-                        print(dataframe.iloc[i])
-                print(dataframe.iloc[i])
+                        print(dataframe.iloc[i]) # have this print in table
+                print(dataframe.iloc[i]) # have this print in table
             i += 1
     else:
         print("Sorry, that is an invalid column type")
