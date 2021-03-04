@@ -5,10 +5,13 @@ Last Edited: 16/02/2021"""
 import hashlib
 import glob
 import pandas as pd
+import os
 from os import path
-import argparse
+# import argparse
 
-target = "/home/writer/"  # this sets the target directory
+
+operating_sys = os.uname()
+target = input("Enter target directory: ")  # this sets the target directory
 names = glob.glob(target + '**/*.*', recursive=True)  # this goes through every file path inside of the directory
 hashed_dict = {}  # this is where the hashed files will be stored
 
