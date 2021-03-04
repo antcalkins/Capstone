@@ -1,24 +1,33 @@
 """ This code is designed to hash files and create a pandas dataframe that can be referenced by a graphical interface
 and modified by the user.
 Authors: L.E. Rogers and A.B. Calkins
-Last Edited: 16/02/2021"""
+Last Edited: 03/03/2021"""
 import hashlib
 import glob
 import pandas as pd
-import os
+import platform
 from os import path
 # import argparse
 
 
-operating_sys = os.uname()
+operating_system = platform.system()
+operating_system_version = platform.release()
 target = input("Enter target directory: ")  # this sets the target directory
 slash = ""
-if operating_sys[0] == "Linux":
+if operating_system == "Windows":
+    if operating_system_version in (8, 8.1, 10):
+        names = glob.glob(target + '**\\*.*',
+                          recursive=True)  # this goes through every file path inside of the directory
+        slash = "\\"
+elif operating_system == "Linux":
     names = glob.glob(target + '**/*.*', recursive=True)  # this goes through every file path inside of the directory
     slash = "/"
-elif operating_sys[0] == "Windows":
-    names = glob.glob(target + '**\*.*', recursive=True)  # this goes through every file path inside of the directory
-    slash = """\\"""
+"""
+To properly implement this portion of the code, likes 60-119 need to become part of a def main.
+else:
+    print("This os is not supported, we cannot guarantee that it will work, do you wish to proceed?")
+    check = input("Type 'y' for yes or 'n' for no: ")
+    """
 hashed_dict = {}  # this is where the hashed files will be stored
 
 

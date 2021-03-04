@@ -1,6 +1,8 @@
 """This file is testing aspects of the os module that we want to store somewhere in our program including operating
 system name and other attributes."""
 import os
+import platform
+import distro
 
 operating_system = os.uname()
 print(operating_system)
