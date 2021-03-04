@@ -4,24 +4,30 @@ import os
 import platform
 import distro
 
-operating_system = os.uname()
+operating_system = platform.system()
 print(operating_system)
+operating_system_version = platform.release()
+python_version = platform.python_version()
 
 """This code does not locate the string, can be anywhere"""
-if operating_system.__contains__("Linux"):
-    print("It works")
-else:
-    print("Failed")
+if operating_system == "Windows":
+    print("Windows")
+    if operating_system_version in (8, 8.1, 10):
+        print(operating_system_version)
+    else:
+        print("This os is not supported, we cannot guarantee that it will work, do you wish to proceed?")
 
-if operating_system[0] == "Linux":
-    print("It works")
+elif operating_system == "Linux":
+    print("Linux")
+    print(operating_system_version)
 else:
-    print("Failed")
-
+    print("This os is not supported, we cannot guarantee that it will work, do you wish to proceed?")
 """
-if operating_system['sysname'] == "Linux":
-    print("It works")
-else:
-    print("Failed")
-This section of code failed due to the fact that os.uname() returns a tuple and it cannot be called by the 
-item identifying name such as sysname."""
+This is how we could implement a check for Mac OS if we choose to support it in the future.
+elif operating_system == "Darwin":
+    print("Mac")
+    print(operating_system_version)
+"""
+
+
+print (distro.linux_distribution())
