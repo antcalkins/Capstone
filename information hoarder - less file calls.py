@@ -12,7 +12,13 @@ from os import path
 
 operating_sys = os.uname()
 target = input("Enter target directory: ")  # this sets the target directory
-names = glob.glob(target + '**/*.*', recursive=True)  # this goes through every file path inside of the directory
+slash = ""
+if operating_sys[0] == "Linux":
+    names = glob.glob(target + '**/*.*', recursive=True)  # this goes through every file path inside of the directory
+    slash = "/"
+elif operating_sys[0] == "Windows":
+    names = glob.glob(target + '**\*.*', recursive=True)  # this goes through every file path inside of the directory
+    slash = """\\"""
 hashed_dict = {}  # this is where the hashed files will be stored
 
 
@@ -57,7 +63,7 @@ if path.exists("dataframe2.csv") is False:
     dataframe = pd.DataFrame(list(hashed_dict.items()), columns=['full file paths', 'hashes'])  # creates dataframe
     dataframe[['md5', 'sha256', 'sha1']] = dataframe['hashes'].str.split(expand=True)  # splits hashes column
     dataframe.drop(['hashes'], axis=1, inplace=True)  # drops the unnecessary hashes column
-    dataframe[['path parts']] = dataframe['full file paths'].str.split("/")
+    dataframe[['path parts']] = dataframe['full file paths'].str.split(slash)
     dataframe.to_csv("dataframe2.csv")  # converts dataframe to a csv file
     print("file made :)")
     search_start = input("Would you like to search the database? Type 'y' for yes or 'n' for no ")
@@ -90,7 +96,7 @@ else:
         dataframe2 = pd.DataFrame(list(hashed_dict.items()), columns=['full file paths', 'hashes'])  # creates dataframe
         dataframe2[['md5', 'sha256', 'sha1']] = dataframe2['hashes'].str.split(expand=True)  # splits hashes column
         dataframe2.drop(['hashes'], axis=1, inplace=True)  # drops the unnecessary hashes column
-        dataframe2[['path parts']] = dataframe2['full file paths'].str.split("/")
+        dataframe2[['path parts']] = dataframe2['full file paths'].str.split(slash)
         dataframe2.to_csv("dataframe_updated.csv")  # converts dataframe to a csv file
         dataframe = dataframe2
     search_start = input("Would you like to search the database? Type 'y' for yes or 'n' for no ")
