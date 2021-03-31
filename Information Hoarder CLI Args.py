@@ -9,6 +9,14 @@ import argparse
 import pandas as pd
 from datetime import datetime
 import platform
+import os
+
+
+def convert_date(timestamp):
+    d = datetime.utcfromtimestamp(timestamp)
+    format_date = d.strftime('%d/%b/%Y_%H:%M:%S')
+    return format_date
+
 
 def read_binary_file(path):
     """Reads a binary file specified by 'path' and print contents to console."""
@@ -18,7 +26,8 @@ def read_binary_file(path):
     md5_hash = hashlib.md5(content).hexdigest()
     sha256_hash = hashlib.sha256(content).hexdigest()
     sha1_hash = hashlib.sha1(content).hexdigest()
-    return str(md5_hash) + " " + str(sha256_hash) + " " + str(sha1_hash)
+    stat = os.stat(path)
+    return str(md5_hash) + " " + str(sha256_hash) + " " + str(sha1_hash) + " " + str(convert_date(stat.st_mtime))
 
 
 def search_function(column, search_term):
@@ -56,15 +65,27 @@ for i in range(0, len(names)):
     """This creates the entries for the dictionary with the index being the full paths and the
     column info being hashes"""
     try:
-        hashed_dict[names[i]] = read_binary_file(names[i])
+        hashed_dict[names[i]] = str(i) + " " + read_binary_file(names[i])
     except IsADirectoryError or KeyError or FileNotFoundError:
         pass
+
+# Database Generation and manipulation
 dataframe = pd.DataFrame(list(hashed_dict.items()), columns=['full file paths', 'hashes'])  # creates dataframe
-dataframe[['md5', 'sha256', 'sha1']] = dataframe['hashes'].str.split(expand=True)  # splits hashes column
+dataframe[['index', 'md5', 'sha256', 'sha1', 'modified date-time']] = dataframe['hashes'].str.split(
+    expand=True)  # splits hashes column
 dataframe.drop(['hashes'], axis=1, inplace=True)  # drops the unnecessary hashes column
-dataframe_list = list(dataframe.columns)
+df_dups = dataframe[dataframe.duplicated(['md5', 'sha256', 'sha1'])]
+print(df_dups.columns)
+dups = df_dups['index']
+duplicates = []
+for i in range(0, len(dataframe)):
+    if i in dups:
+        duplicates.append('True')
+    else:
+        duplicates.append('False')
+dataframe['duplicates'] = duplicates
 now = datetime.now()
-file_name = "IHDB_" + now.strftime("%d-%m-%Y_%H-%M-%S") + ".csv"  # sets the naming convention for the database files
+file_name = "IHDB_" + now.strftime("%d-%m-%Y_%H-%M-%S") + ".csv"
 dataframe.to_csv(file_name)  # converts dataframe to a csv file
 print("New database saved as " + file_name)
 
