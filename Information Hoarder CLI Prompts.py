@@ -1,13 +1,12 @@
 """ This code is designed to hash files and create a pandas dataframe that can be referenced by a graphical interface
 and modified by the user. Presently it is not attached to a gui, and therefore runs natively within an environment such
-as pycharm, where it functions as a program prompted command line tool. Path Parts Still Exists.
+as pycharm, where it functions as a program prompted command line tool. There is no Path Parts.
 Authors: L.E. Rogers and A.B. Calkins
 Last Edited: 04/03/2021"""
 import hashlib
 import glob
 import pandas as pd
 import platform
-from os import path
 from datetime import datetime
 
 """This portion of the code detects what operating system a user is running the program on. It can set variables by 
@@ -47,10 +46,6 @@ def search_function(column, search_term):
         search = list(dataframe[column])
         for i in dataframe.index:
             if search[i].__contains__(search_term) is True:
-                if column == "path parts":
-                    search_list = dataframe[column][i]
-                    if search_list.__contains__(search_term) is True:
-                        print(dataframe.iloc[i])  # have this print in table
                 print(dataframe.iloc[i])  # have this print in table
             i += 1
     else:
@@ -80,7 +75,6 @@ if database_exists is False:
     dataframe = pd.DataFrame(list(hashed_dict.items()), columns=['full file paths', 'hashes'])  # creates dataframe
     dataframe[['md5', 'sha256', 'sha1']] = dataframe['hashes'].str.split(expand=True)  # splits hashes column
     dataframe.drop(['hashes'], axis=1, inplace=True)  # drops the unnecessary hashes column
-    dataframe[['path parts']] = dataframe['full file paths'].str.split(slash)
     now = datetime.now()
     file_name = "IHDB_" + now.strftime("%d-%m-%Y_%H-%M-%S") + ".csv"
     dataframe.to_csv(file_name)  # converts dataframe to a csv file
@@ -117,7 +111,6 @@ else:
             dataframe2 = pd.DataFrame(list(hashed_dict.items()), columns=['full file paths', 'hashes'])
             dataframe2[['md5', 'sha256', 'sha1']] = dataframe2['hashes'].str.split(expand=True)  # splits hashes column
             dataframe2.drop(['hashes'], axis=1, inplace=True)  # drops the unnecessary hashes column
-            dataframe2[['path parts']] = dataframe2['full file paths'].str.split(slash)
             now = datetime.now()
             file_name = "IHDB_" + now.strftime("%d-%m-%Y_%H-%M-%S") + ".csv"
             dataframe2.to_csv(file_name)  # converts dataframe to a csv file
@@ -134,7 +127,6 @@ else:
             dataframe2 = pd.DataFrame(list(hashed_dict.items()), columns=['full file paths', 'hashes'])
             dataframe2[['md5', 'sha256', 'sha1']] = dataframe2['hashes'].str.split(expand=True)  # splits hashes column
             dataframe2.drop(['hashes'], axis=1, inplace=True)  # drops the unnecessary hashes column
-            dataframe2[['path parts']] = dataframe2['full file paths'].str.split(slash)
             concatenated = pd.concat([dataframe, dataframe2])
             concatenated.drop_duplicates()
             concatenated.to_csv(db_list[0])
