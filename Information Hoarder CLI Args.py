@@ -87,6 +87,7 @@ dataframe['duplicates'] = duplicates
 now = datetime.now()
 file_name = "IHDB_" + now.strftime("%d-%m-%Y_%H-%M-%S") + ".csv"
 dataframe.to_csv(file_name)  # converts dataframe to a csv file
+dataframe_list = dataframe.columns
 print("New database saved as " + file_name)
 
 # Argparse begins here
